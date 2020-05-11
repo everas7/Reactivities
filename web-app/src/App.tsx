@@ -1,5 +1,5 @@
 import React, { useEffect, useState, } from 'react';
-import logo from './logo.svg';
+import { Header, Icon, List } from 'semantic-ui-react'
 import './App.css';
 import axios from 'axios';
 
@@ -17,15 +17,16 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <ul>
-          {values.map(value => (
-            <li>{value.name}</li>
-          ))}
-        </ul>
-      </header>
+    <div>
+      <Header as='h2'>
+        <Icon name='plug' />
+        <Header.Content>Uptime Guarantee</Header.Content>
+      </Header>
+      <List>
+        {values.map(value => (
+          <List.Item key={value.id}>{value.name}</List.Item>
+        ))}
+      </List>
     </div>
   );
 }
