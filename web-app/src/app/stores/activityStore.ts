@@ -3,7 +3,7 @@ import { IActivity } from '../models/activity';
 import { createContext, SyntheticEvent } from 'react';
 import agent from '../api/agent';
 
-configure({enforceActions: 'always'});
+configure({ enforceActions: 'always' });
 
 class ActivityStore {
   @observable activityRegistry = new Map<string, IActivity>();
@@ -12,10 +12,23 @@ class ActivityStore {
   @observable submitting = false;
   @observable target = '';
 
-  @computed get activitiesByDate() {
-    return Array.from(this.activityRegistry.values()).sort(
+  @computed get activitiesByDate(): [string, IActivity[]][] {
+    const activitiesArray = Array.from(this.activityRegistry.values()).sort(
       (a, b) => Date.parse(a.date) - Date.parse(b.date)
     );
+
+    const groupByDate = (
+      activitites: { [key: string]: IActivity[] },
+      currentActivity: IActivity
+    ) => {
+      const date = currentActivity.date.split('T')[0];
+      return {
+        ...activitites,
+        [date]: [...(activitites[date] || []), currentActivity]
+      };
+    };
+
+    return Object.entries(activitiesArray.reduce(groupByDate, {}));
   }
 
   @action loadActivities = async () => {
@@ -78,7 +91,7 @@ class ActivityStore {
     } catch (error) {
       runInAction('creating activities error', () => {
         this.submitting = false;
-      })
+      });
       console.log(error);
     }
   };
