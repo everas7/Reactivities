@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import { Item, Button, Segment, Label } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import ActivityStore from '../../../app/stores/activityStore';
+import { NavLink } from 'react-router-dom';
 
 function ActivityList() {
   const activityStore = useContext(ActivityStore);
   const {
     activitiesByDate: activities,
-    selectActivity,
     submitting,
     target,
     deleteActivity
@@ -37,10 +37,10 @@ function ActivityList() {
                   onClick={e => deleteActivity(e, activity.id)}
                 />
                 <Button
+                  as={NavLink} to={`/activities/${activity.id}`}
                   floated="right"
                   content="View"
                   color="blue"
-                  onClick={() => selectActivity(activity.id)}
                 />
                 <Label basic content={activity.category} />
               </Item.Extra>

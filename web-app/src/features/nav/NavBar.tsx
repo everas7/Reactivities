@@ -1,20 +1,23 @@
-import React, { useContext } from "react";
-import { Menu, Button, Container } from "semantic-ui-react";
-import ActivityStore from '../../app/stores/activityStore';
+import React from 'react';
+import { Menu, Button, Container } from 'semantic-ui-react';
+import { NavLink } from 'react-router-dom';
 
 export function NavBar() {
-  const activityStore = useContext(ActivityStore);
   return (
     <div>
       <Menu fixed="top" inverted>
         <Container>
-          <Menu.Item header>
-            <img src="assets/logo.png" alt="logo" style={{marginRight: '10px'}}/>
+          <Menu.Item header as={NavLink} exact to="/">
+            <img
+              src="/assets/logo.png"
+              alt="logo"
+              style={{ marginRight: '10px' }}
+            />
             Reactivities
           </Menu.Item>
-          <Menu.Item name="Activities" />
+          <Menu.Item name="Activities" as={NavLink} exact to="/activities" />
           <Menu.Item>
-            <Button positive onClick={activityStore.openCreateForm}>
+            <Button positive as={NavLink} exact to="/activities/create">
               Create Activity
             </Button>
           </Menu.Item>
@@ -22,4 +25,4 @@ export function NavBar() {
       </Menu>
     </div>
   );
-};
+}

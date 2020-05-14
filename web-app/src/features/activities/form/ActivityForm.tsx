@@ -1,35 +1,42 @@
-import React, { useState, FormEvent, useContext } from 'react';
+import React, { useState, FormEvent, useContext, useEffect } from 'react';
 import { Segment, Form, Button } from 'semantic-ui-react';
-import { IActivity } from '../../../app/models/activity';
 import { v4 as uuid } from 'uuid';
 import { observer } from 'mobx-react-lite';
 import ActivityStore from '../../../app/stores/activityStore';
+import { useParams, useHistory } from 'react-router';
 
 function ActivityForm() {
   const activityStore = useContext(ActivityStore);
+  const params = useParams<{ id: string }>();
+  const history = useHistory();
   const {
-    selectedActivity: baseActivity,
+    activity: baseActivity,
     createActivity,
     editActivity,
     submitting,
-    closeForm,
+    loadActivity,
+    clearActivity
   } = activityStore;
 
-  const initializeForm = (): IActivity => {
-    return (
-      baseActivity || {
-        id: '',
-        title: '',
-        description: '',
-        date: '',
-        category: '',
-        city: '',
-        venue: ''
-      }
-    );
-  };
+  const [activity, setActivity] = useState({
+    id: '',
+    title: '',
+    description: '',
+    date: '',
+    category: '',
+    city: '',
+    venue: ''
+  });
 
-  const [activity, setActivity] = useState(initializeForm);
+  useEffect(() => {
+    if (params.id && activity.id.length === 0) {
+      loadActivity(params.id).then(
+        () => baseActivity && setActivity(baseActivity)
+      );
+    }
+    return clearActivity;
+  }, [loadActivity, clearActivity, params.id, baseActivity, activity.id.length]);
+  
 
   const handleInputChange = (
     event: FormEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -40,10 +47,13 @@ function ActivityForm() {
 
   const handleFormSubmission = () => {
     if (!activity.id) {
-      activity.id = uuid();
-      createActivity(activity);
+      const newActivity = {
+        ...activity,
+        id: uuid()
+      }
+      createActivity(newActivity).then(() => history.push(`/activities/${newActivity.id}`));
     } else {
-      editActivity(activity);
+      editActivity(activity).then(()=> history.push(`/activities/${activity.id}`));
     }
   };
 
@@ -96,7 +106,7 @@ function ActivityForm() {
           content="Submit"
         />
         <Button
-          onClick={closeForm}
+          onClick={() => history.push(`/activities/${activity.id}`)}
           floated="right"
           type="button"
           content="Cancel"
@@ -104,6 +114,6 @@ function ActivityForm() {
       </Form>
     </Segment>
   );
-};
+}
 
 export default observer(ActivityForm);
