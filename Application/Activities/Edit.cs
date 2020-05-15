@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using Persistance;
 
@@ -17,6 +18,21 @@ namespace Application.Activities
       public DateTime? Date { get; set; }
       public string City { get; set; }
       public string Venue { get; set; }
+    }
+    
+    public class CommandValidator : AbstractValidator<Command>
+    {
+      public CommandValidator()
+      {
+        RuleFor(x => x).Must(x => !string.IsNullOrEmpty(x.Title)
+        || !string.IsNullOrEmpty(x.Description)
+        || !string.IsNullOrEmpty(x.Category)
+        || !string.IsNullOrEmpty(x.Date.ToString())
+        || !string.IsNullOrEmpty(x.City)
+        || !string.IsNullOrEmpty(x.Venue)
+        ).WithName("Activity").WithMessage("You must provide at least one property to update");
+
+      }
     }
     
     public class Handler : IRequestHandler<Command>
