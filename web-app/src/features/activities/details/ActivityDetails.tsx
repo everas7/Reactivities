@@ -22,8 +22,9 @@ function ActivityDetails() {
     loadActivity(params.id);
   }, [loadActivity, params.id]);
 
-  if (loadingActivities || !activity) return <LoadingComponent content="Loading activity..."/>
+  if (loadingActivities) return <LoadingComponent content="Loading activity..."/>
 
+  if (!activity) return <h1>Oops something went wrong...</h1>
   return (
     <Grid>
       <Grid.Column width={10}>
