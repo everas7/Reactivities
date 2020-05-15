@@ -10,23 +10,28 @@ import { TextAreaInput } from '../../../app/common/form/TextAreaInput';
 import { SelectInput } from '../../../app/common/form/SelectInput';
 import { DateInput } from '../../../app/common/form/DateInput';
 import { category } from './constants';
-import {
-  ActivityFormValues
-} from '../../../app/models/activity';
+import { ActivityFormValues } from '../../../app/models/activity';
 import { combineDateAndTime } from '../../../app/common/util/util';
-import {combineValidators, isRequired, composeValidators, hasLengthGreaterThan} from 'revalidate';
+import {
+  combineValidators,
+  isRequired,
+  composeValidators,
+  hasLengthGreaterThan
+} from 'revalidate';
 
 const validate = combineValidators({
-  title: isRequired({message: 'The activity title is required'}),
+  title: isRequired({ message: 'The activity title is required' }),
   category: isRequired('Category'),
   description: composeValidators(
     isRequired('Description'),
-    hasLengthGreaterThan(4)({message: 'Description needs to be at least 5 characters'})
+    hasLengthGreaterThan(4)({
+      message: 'Description needs to be at least 5 characters'
+    })
   )(),
   city: isRequired('City'),
   venue: isRequired('Venue'),
   date: isRequired('Date'),
-  time: isRequired('Time'),
+  time: isRequired('Time')
 });
 
 function ActivityForm() {
@@ -37,7 +42,7 @@ function ActivityForm() {
     createActivity,
     editActivity,
     submitting,
-    loadActivity,
+    loadActivity
   } = activityStore;
 
   const [activity, setActivity] = useState(new ActivityFormValues());
@@ -51,7 +56,6 @@ function ActivityForm() {
         .finally(() => setLoading(false));
     }
   }, [loadActivity, params.id]);
-
 
   const handleFinalFormSubmit = (values: any) => {
     const datetime = combineDateAndTime(values.date, values.time);
