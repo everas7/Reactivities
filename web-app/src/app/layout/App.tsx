@@ -1,5 +1,5 @@
-import React from 'react';
-import { Container } from 'semantic-ui-react';
+import React, { useContext, useEffect } from 'react';
+import { Container, Loader } from 'semantic-ui-react';
 import { NavBar } from '../../features/nav/NavBar';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
 import { observer } from 'mobx-react-lite';
@@ -9,12 +9,28 @@ import { HomePage } from '../../features/home/HomePage';
 import ActivityDetails from '../../features/activities/details/ActivityDetails';
 import { NotFound } from './NotFound';
 import { ToastContainer } from 'react-toastify';
+import { LoginForm } from '../../features/user/LoginForm';
+import { RootStoreContext } from '../stores/rootStore';
+import ModalContainer from '../common/modals/ModalContainer';
 
 function App() {
   const location = useLocation();
+  const rootStore = useContext(RootStoreContext);
+  const { token, setAppLoaded, appLoaded } = rootStore.commonStore;
+  const { getUser } = rootStore.userStore;
+  useEffect(() => {
+    if (token) {
+      getUser().finally(() => setAppLoaded());
+    } else {
+      setAppLoaded();
+    }
+  }, [token, getUser, setAppLoaded]);
+
+  if (!appLoaded) return <Loader content="Loading app..."/>
   return (
     <>
       <ToastContainer position="bottom-right" />
+      <ModalContainer />
       <Route exact path="/" component={HomePage} />
       <Route
         path="/(.+)"

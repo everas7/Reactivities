@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import { Grid } from 'semantic-ui-react';
-import ActivityStore from '../../../app/stores/activityStore';
 import { observer } from 'mobx-react-lite';
 import { useParams, } from 'react-router-dom';
 import { LoadingComponent } from '../../../app/common/loader/LoadingComponent';
@@ -8,15 +7,16 @@ import ActivityDetailsInfo from './ActivityDetailsInfo';
 import ActivityDetailsHeader from './ActivityDetailsHeader';
 import {ActivityDetailsChat } from './ActivityDetailsChat';
 import {ActivityDetailsSidebar } from './ActivityDetailsSidebar';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 function ActivityDetails() {
-  const activityStore = useContext(ActivityStore);
+  const rootStore = useContext(RootStoreContext);
   const params = useParams<{id: string}>();
   const {
     activity,
     loadActivity,
     loadingActivities
-  } = activityStore;
+  } = rootStore.activityStore;
 
   useEffect(() => {
     loadActivity(params.id);
