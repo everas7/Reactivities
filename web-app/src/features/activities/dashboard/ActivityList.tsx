@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, Fragment } from 'react';
 import { Item, Label } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import {RootStoreContext} from '../../../app/stores/rootStore';
@@ -11,9 +11,9 @@ function ActivityList() {
 
   return (
     <>
-      {activitiesByDate.map(([group, activities]) => (
-        <>
-          <Label key={group} size="large" color="blue">
+      {activitiesByDate.map(([group, activities], i) => (
+        <Fragment key={group}>
+          <Label size="large" color="blue">
             {format(group, 'eeee do MMMM')}
           </Label>
           <Item.Group divided>
@@ -21,7 +21,7 @@ function ActivityList() {
               <ActivityListItem key={activity.id} activity={activity} />
             ))}
           </Item.Group>
-        </>
+        </Fragment>
       ))}
     </>
   );

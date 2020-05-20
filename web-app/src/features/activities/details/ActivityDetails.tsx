@@ -6,7 +6,7 @@ import { LoadingComponent } from '../../../app/common/loader/LoadingComponent';
 import ActivityDetailsInfo from './ActivityDetailsInfo';
 import ActivityDetailsHeader from './ActivityDetailsHeader';
 import {ActivityDetailsChat } from './ActivityDetailsChat';
-import {ActivityDetailsSidebar } from './ActivityDetailsSidebar';
+import ActivityDetailsSidebar from './ActivityDetailsSidebar';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 
 function ActivityDetails() {
@@ -33,7 +33,7 @@ function ActivityDetails() {
       <ActivityDetailsChat />
       </Grid.Column>
       <Grid.Column width={6}>
-        <ActivityDetailsSidebar/>
+        <ActivityDetailsSidebar attendees={activity.attendees}/>
       </Grid.Column>
     </Grid>
   );
