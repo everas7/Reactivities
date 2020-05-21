@@ -18,20 +18,28 @@ import {
   hasLengthGreaterThan
 } from 'revalidate';
 import { RootStoreContext } from '../../../app/stores/rootStore';
+import { Wizard } from '../../../app/common/wizard/Wizard';
+import { WizardPage } from '../../../app/common/wizard/WizardPage';
 
-const validate = combineValidators({
+const validatePage1 = combineValidators({
   title: isRequired({ message: 'The activity title is required' }),
-  category: isRequired('Category'),
   description: composeValidators(
     isRequired('Description'),
     hasLengthGreaterThan(4)({
       message: 'Description needs to be at least 5 characters'
     })
-  )(),
-  city: isRequired('City'),
-  venue: isRequired('Venue'),
+  )()
+});
+
+const validatePage2 = combineValidators({
+  category: isRequired('Category'),
   date: isRequired('Date'),
   time: isRequired('Time')
+});
+
+const validatePage3 = combineValidators({
+  city: isRequired('City'),
+  venue: isRequired('Venue')
 });
 
 function ActivityForm() {
@@ -76,12 +84,13 @@ function ActivityForm() {
     <Grid>
       <Grid.Column width={10}>
         <Segment clearing>
-          <FinalForm
-            onSubmit={handleFinalFormSubmit}
-            validate={validate}
-            initialValues={activity}
-            render={({ handleSubmit, invalid, pristine }) => (
-              <Form onSubmit={handleSubmit} loading={loading}>
+            <Wizard
+              initialValues={activity}
+              loading={loading}
+              submitting={submitting}
+              onSubmit={handleFinalFormSubmit}
+            >
+              <WizardPage validate={validatePage1}>
                 <Field placeholder="Title" name="title" component={TextInput} />
                 <Field
                   placeholder="Description"
@@ -89,6 +98,8 @@ function ActivityForm() {
                   rows={3}
                   component={TextAreaInput}
                 />
+              </WizardPage>
+              <WizardPage validate={validatePage2}>
                 <Field
                   placeholder="Category"
                   name="category"
@@ -109,26 +120,12 @@ function ActivityForm() {
                     component={DateInput}
                   />
                 </Form.Group>
+              </WizardPage>
+              <WizardPage validate={validatePage3}>
                 <Field placeholder="City" name="city" component={TextInput} />
                 <Field placeholder="Venue" name="venue" component={TextInput} />
-                <Button
-                  loading={submitting}
-                  disabled={loading || invalid || pristine}
-                  floated="right"
-                  type="submit"
-                  positive
-                  content="Submit"
-                />
-                <Button
-                  disabled={loading}
-                  onClick={() => history.push(`/activities/${activity.id}`)}
-                  floated="right"
-                  type="button"
-                  content="Cancel"
-                />
-              </Form>
-            )}
-          />
+              </WizardPage>
+            </Wizard>
         </Segment>
       </Grid.Column>
     </Grid>

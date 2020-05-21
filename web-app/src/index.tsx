@@ -16,10 +16,10 @@ dateFnsLocalizer();
 export const history = createBrowserHistory();
 
 ReactDOM.render(
-  <Router history={history}>
-    <ScrollToTop />
-    <App />
-  </Router>,
+    <Router history={history}>
+      <ScrollToTop />
+      <App />
+    </Router>,
   document.getElementById('root')
 );
 

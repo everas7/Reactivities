@@ -109,6 +109,7 @@ export class ActivityStore {
       const attendee = this.mapUserToAttendee(this.rootStore.userStore.user!);
       activity.isHost = true;
       activity.isGoing = true;
+      attendee.isHost = true;
       const attendees = [attendee];
       activity.attendees = attendees;
       runInAction('creating activities', () => {

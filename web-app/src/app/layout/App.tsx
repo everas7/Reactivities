@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { Container, Loader } from 'semantic-ui-react';
 import { NavBar } from '../../features/nav/NavBar';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
-import { observer } from 'mobx-react-lite';
+import { observer, useObserver } from 'mobx-react-lite';
 import { Route, useLocation, Switch } from 'react-router-dom';
 import ActivityForm from '../../features/activities/form/ActivityForm';
 import { HomePage } from '../../features/home/HomePage';
@@ -11,6 +11,7 @@ import { NotFound } from './NotFound';
 import { ToastContainer } from 'react-toastify';
 import { RootStoreContext } from '../stores/rootStore';
 import ModalContainer from '../common/modals/ModalContainer';
+import {ProfilePage} from '../../features/profiles/ProfilePage';
 
 function App() {
   const location = useLocation();
@@ -25,7 +26,7 @@ function App() {
     }
   }, [token, getUser, setAppLoaded]);
 
-  if (!appLoaded) return <Loader content="Loading app..."/>
+  if (!appLoaded) return <Loader content="Loading app..." />;
   return (
     <>
       <ToastContainer position="bottom-right" />
@@ -49,6 +50,11 @@ function App() {
                   exact
                   path="/activities/:id"
                   component={ActivityDetails}
+                />
+                <Route
+                  exact
+                  path="/profile/:username"
+                  component={ProfilePage}
                 />
                 <Route component={NotFound} />
               </Switch>

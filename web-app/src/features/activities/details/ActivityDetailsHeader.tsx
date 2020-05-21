@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Segment, Item, Image, Button, Header } from 'semantic-ui-react';
 import { IActivity } from '../../../app/models/activity';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { format } from 'date-fns';
 import { RootStoreContext } from '../../../app/stores/rootStore';
@@ -24,6 +24,7 @@ const ActivityDetailsHeader: React.FC<{ activity: IActivity }> = ({
 }) => {
   const rootStore = useContext(RootStoreContext);
   const { attendActivity, cancelAttendance, loading } = rootStore.activityStore;
+  const host = activity.attendees.filter(a => a.isHost)[0];
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: '0' }}>
@@ -43,7 +44,10 @@ const ActivityDetailsHeader: React.FC<{ activity: IActivity }> = ({
                 />
                 <p>{format(activity.date, 'eeee do MMMM')}</p>
                 <p>
-                  Hosted by <strong>Bob</strong>
+                  Hosted by
+                  <Link to={`/profile/${host.username}`}>
+                    <strong> {host.displayName}</strong>
+                  </Link>
                 </p>
               </Item.Content>
             </Item>

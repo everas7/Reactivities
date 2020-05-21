@@ -26,7 +26,7 @@ const ActivityListItem: React.FC<IProps> = ({ activity }) => {
               <Item.Header as={Link} to={`/activities/${activity.id}`}>
                 {activity.title}
               </Item.Header>
-              <Item.Description>Hosted by {host.displayName}</Item.Description>
+              <Item.Description>Hosted by <Link to={`/profile/${host.username}`}>{host.displayName}</Link></Item.Description>
               {activity.isHost && (
                 <Item.Description>
                   <Label basic color="orange" content="You are hosting this activity" />
