@@ -2,6 +2,7 @@
 using Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Reactivities.Domain;
 
 namespace Persistance
 {
@@ -15,6 +16,7 @@ namespace Persistance
         public DbSet<Activity> Activities { get; set; }
 
         public DbSet<UserActivity> UserActivities { get; set; }
+        public DbSet<Photo> Photos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
