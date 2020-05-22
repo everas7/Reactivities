@@ -21,6 +21,7 @@ const ActivityListItem: React.FC<IProps> = ({ activity }) => {
               size="tiny"
               circular
               src={host.image || '/assets/user.png'}
+              style={{marginBottom: 9}}
             />
             <Item.Content>
               <Item.Header as={Link} to={`/activities/${activity.id}`}>

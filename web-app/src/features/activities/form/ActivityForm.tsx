@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Segment, Form, Button, Grid } from 'semantic-ui-react';
+import { Segment, Form, Grid } from 'semantic-ui-react';
 import { v4 as uuid } from 'uuid';
 import { observer } from 'mobx-react-lite';
-import { useParams, useHistory } from 'react-router';
-import { Form as FinalForm, Field } from 'react-final-form';
+import { useParams, } from 'react-router';
+import { Field } from 'react-final-form';
 import { TextInput } from '../../../app/common/form/TextInput';
 import { TextAreaInput } from '../../../app/common/form/TextAreaInput';
 import { SelectInput } from '../../../app/common/form/SelectInput';
@@ -45,7 +45,6 @@ const validatePage3 = combineValidators({
 function ActivityForm() {
   const rootStore = useContext(RootStoreContext);
   const params = useParams<{ id: string }>();
-  const history = useHistory();
   const {
     createActivity,
     editActivity,
@@ -84,48 +83,49 @@ function ActivityForm() {
     <Grid>
       <Grid.Column width={10}>
         <Segment clearing>
-            <Wizard
-              initialValues={activity}
-              loading={loading}
-              submitting={submitting}
-              onSubmit={handleFinalFormSubmit}
-            >
-              <WizardPage validate={validatePage1}>
-                <Field placeholder="Title" name="title" component={TextInput} />
+          <Wizard
+            key={activity.id}
+            initialValues={activity}
+            loading={loading}
+            submitting={submitting}
+            onSubmit={handleFinalFormSubmit}
+          >
+            <WizardPage validate={validatePage1}>
+              <Field placeholder="Title" name="title" component={TextInput} />
+              <Field
+                placeholder="Description"
+                name="description"
+                rows={3}
+                component={TextAreaInput}
+              />
+            </WizardPage>
+            <WizardPage validate={validatePage2}>
+              <Field
+                placeholder="Category"
+                name="category"
+                component={SelectInput}
+                options={category}
+              />
+              <Form.Group widths="equal">
                 <Field
-                  placeholder="Description"
-                  name="description"
-                  rows={3}
-                  component={TextAreaInput}
+                  placeholder="Date"
+                  name="date"
+                  date
+                  component={DateInput}
                 />
-              </WizardPage>
-              <WizardPage validate={validatePage2}>
                 <Field
-                  placeholder="Category"
-                  name="category"
-                  component={SelectInput}
-                  options={category}
+                  placeholder="Time"
+                  time
+                  name="time"
+                  component={DateInput}
                 />
-                <Form.Group widths="equal">
-                  <Field
-                    placeholder="Date"
-                    name="date"
-                    date
-                    component={DateInput}
-                  />
-                  <Field
-                    placeholder="Time"
-                    time
-                    name="time"
-                    component={DateInput}
-                  />
-                </Form.Group>
-              </WizardPage>
-              <WizardPage validate={validatePage3}>
-                <Field placeholder="City" name="city" component={TextInput} />
-                <Field placeholder="Venue" name="venue" component={TextInput} />
-              </WizardPage>
-            </Wizard>
+              </Form.Group>
+            </WizardPage>
+            <WizardPage validate={validatePage3}>
+              <Field placeholder="City" name="city" component={TextInput} />
+              <Field placeholder="Venue" name="venue" component={TextInput} />
+            </WizardPage>
+          </Wizard>
         </Segment>
       </Grid.Column>
     </Grid>

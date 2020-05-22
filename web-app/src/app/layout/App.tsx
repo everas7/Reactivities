@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { Container, Loader } from 'semantic-ui-react';
 import { NavBar } from '../../features/nav/NavBar';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
-import { observer, useObserver } from 'mobx-react-lite';
+import { observer, } from 'mobx-react-lite';
 import { Route, useLocation, Switch } from 'react-router-dom';
 import ActivityForm from '../../features/activities/form/ActivityForm';
 import { HomePage } from '../../features/home/HomePage';

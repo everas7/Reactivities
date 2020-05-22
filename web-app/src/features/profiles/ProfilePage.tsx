@@ -5,7 +5,7 @@ import { ProfileContent } from './ProfileContent';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { useParams } from 'react-router';
 import { LoadingComponent } from '../../app/common/loader/LoadingComponent';
-import { useObserver, observer } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 
 export const ProfilePage = observer(() => {
   const params = useParams<{ username: string }>();

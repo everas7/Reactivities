@@ -1,6 +1,7 @@
 import React, { useState, ReactElement } from 'react';
 import { Form  as FinalForm} from 'react-final-form';
 import { Button, Form } from 'semantic-ui-react';
+import { observer } from 'mobx-react-lite';
 
 interface IProps {
   onSubmit: (values: {}) => void;
@@ -9,7 +10,7 @@ interface IProps {
   initialValues: {};
 }
 
-export const Wizard: React.FC<IProps> = ({
+export const Wizard: React.FC<IProps> = observer(({
   onSubmit,
   initialValues,
   loading,
@@ -17,7 +18,7 @@ export const Wizard: React.FC<IProps> = ({
   children
 }) => {
   const [page, setPage] = useState(0);
-  const [values, setValues] = useState(initialValues || {});
+  const [values, setValues] = useState(initialValues);
 
   const next = (values: {}) => {
     setValues(values);
@@ -50,7 +51,7 @@ export const Wizard: React.FC<IProps> = ({
       next(values);
     }
   };
-  console.log(page, 'pagina');
+  console.log(values, 'values');
   const activePage = React.Children.toArray(children)[page];
   const isLastPage = page === React.Children.count(children) - 1;
   return (
@@ -58,8 +59,8 @@ export const Wizard: React.FC<IProps> = ({
       initialValues={values}
       validate={validate}
       onSubmit={handleSubmit}
-      render={({ handleSubmit, invalid, pristine }) => (
-        <Form onSubmit={handleSubmit}>
+      render={({ handleSubmit, invalid }) => (
+        <Form onSubmit={handleSubmit} loading={loading}>
           {activePage}
           <div className="buttons">
             {!isLastPage && (
@@ -74,7 +75,7 @@ export const Wizard: React.FC<IProps> = ({
             {isLastPage && (
               <Button
                 loading={submitting}
-                disabled={loading || invalid || pristine}
+                disabled={loading || invalid}
                 floated="right"
                 type="submit"
                 positive
@@ -96,4 +97,4 @@ export const Wizard: React.FC<IProps> = ({
       )}
     />
   );
-};
+});
