@@ -1,6 +1,6 @@
 import { RootStore } from './rootStore';
 import { observable, action, runInAction, computed } from 'mobx';
-import { IProfile, IPhoto } from '../models/profile';
+import { IProfile, IPhoto, IProfileFormValues } from '../models/profile';
 import agent from '../api/agent';
 import { toast } from 'react-toastify';
 
@@ -14,6 +14,7 @@ export class ProfileStore {
   @observable loadingProfile = true;
   @observable uploadingPhoto = false;
   @observable loading = false;
+  @observable updatingProfile = false;
 
   @computed get isCurrentUser() {
     return (
@@ -101,6 +102,29 @@ export class ProfileStore {
         this.loading = false;
       });
       toast.error('There was a problem setting the main photo');
+    }
+  };
+
+  @action updateProfile = async (profile: IProfileFormValues) => {
+    this.updatingProfile = true;
+    try {
+      await agent.Profiles.update(profile);
+      runInAction(() => {
+        if (this.profile) {
+          this.profile = {
+            ...this.profile,
+            ...profile,
+          };
+          this.rootStore.userStore.user!.displayName = profile.displayName;
+        }
+        this.updatingProfile = false;
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error('Problem updating profile info');
+      runInAction(() => {
+        this.updatingProfile = true;
+      });
     }
   };
 }
