@@ -121,7 +121,7 @@ namespace Persistance.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ActivittyId")
+                    b.Property<Guid?>("ActivityId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AuthorId")
@@ -135,7 +135,7 @@ namespace Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ActivittyId");
+                    b.HasIndex("ActivityId");
 
                     b.HasIndex("AuthorId");
 
@@ -345,9 +345,9 @@ namespace Persistance.Migrations
 
             modelBuilder.Entity("Domain.Comment", b =>
                 {
-                    b.HasOne("Domain.Activity", "Activitty")
+                    b.HasOne("Domain.Activity", "Activity")
                         .WithMany("Comments")
-                        .HasForeignKey("ActivittyId");
+                        .HasForeignKey("ActivityId");
 
                     b.HasOne("Domain.AppUser", "Author")
                         .WithMany()
