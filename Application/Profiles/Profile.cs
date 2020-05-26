@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Reactivities.Domain;
+using Domain;
 
 namespace Application.Profiles
 {

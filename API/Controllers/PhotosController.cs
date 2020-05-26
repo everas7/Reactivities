@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Application.Photos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Reactivities.Domain;
+using Domain;
 
 namespace API.Controllers
 {

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
-using Reactivities.Domain;
 
 namespace Domain
 {

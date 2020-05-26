@@ -6,7 +6,7 @@ using Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Persistance;
-using Reactivities.Domain;
+using Domain;
 
 namespace Application.Photos
 {
