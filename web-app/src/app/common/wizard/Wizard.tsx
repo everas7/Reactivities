@@ -26,7 +26,6 @@ export const Wizard: React.FC<IProps> = observer(({
   };
 
   const previous = () => {
-    console.log('pr', page);
     setPage(Math.max(page - 1, 0));
   };
 
@@ -51,7 +50,7 @@ export const Wizard: React.FC<IProps> = observer(({
       next(values);
     }
   };
-  console.log(values, 'values');
+
   const activePage = React.Children.toArray(children)[page];
   const isLastPage = page === React.Children.count(children) - 1;
   return (

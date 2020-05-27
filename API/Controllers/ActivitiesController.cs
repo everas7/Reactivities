@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistance;
+using static Application.Activities.List;
 
 namespace API.Controllers
 {
@@ -17,16 +18,17 @@ namespace API.Controllers
   public class ActivitiesController : BaseController
   {
     [HttpGet]
-    public async Task<ActionResult<List<ActivityDTO>>> List()
+    public async Task<ActionResult<ActivityEnvelope>> List(int? page, int? perPage,
+      bool isGoing, bool isHost, DateTime? startDate)
     {
-      return await Mediator.Send(new List.Query());
+      return await Mediator.Send(new List.Query(page, perPage, isGoing, isHost, startDate));
     }
 
     [HttpGet("{id}")]
     [Authorize]
     public async Task<ActionResult<ActivityDTO>> Details(Guid id)
     {
-      return await Mediator.Send(new Details.Query{Id = id});
+      return await Mediator.Send(new Details.Query { Id = id });
     }
 
     [HttpPost]
@@ -45,21 +47,21 @@ namespace API.Controllers
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "IsActivityHost")]
-    public async Task<ActionResult<Unit>> Delete (Guid id)
+    public async Task<ActionResult<Unit>> Delete(Guid id)
     {
-      return await Mediator.Send(new Delete.Command{Id = id});
+      return await Mediator.Send(new Delete.Command { Id = id });
     }
 
     [HttpPost("{id}/attend")]
     public async Task<ActionResult<Unit>> Attend(Guid id)
     {
-      return await Mediator.Send(new Attend.Command{Id = id});
+      return await Mediator.Send(new Attend.Command { Id = id });
     }
 
     [HttpDelete("{id}/attend")]
     public async Task<ActionResult<Unit>> Unattend(Guid id)
     {
-      return await Mediator.Send(new Unattend.Command{Id = id});
+      return await Mediator.Send(new Unattend.Command { Id = id });
     }
   }
 }

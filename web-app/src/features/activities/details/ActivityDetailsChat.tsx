@@ -19,7 +19,7 @@ export const ActivityDetailsChat = observer(() => {
   useEffect(() => {
     createHubConnection(activity!.id);
     return stopHubConnection;
-  }, [createHubConnection, stopHubConnection, activity!.id]);
+  }, [createHubConnection, stopHubConnection, activity]);
 
   return (
     <Fragment>

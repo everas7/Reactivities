@@ -1,9 +1,8 @@
 import { RootStore } from './rootStore';
 import { observable, action, runInAction, computed, reaction } from 'mobx';
-import { IProfile, IPhoto, IProfileFormValues } from '../models/profile';
+import { IProfile, IPhoto, IProfileFormValues, IUserActivity } from '../models/profile';
 import agent from '../api/agent';
 import { toast } from 'react-toastify';
-import { IUser } from '../models/user';
 
 export class ProfileStore {
   rootStore: RootStore;
@@ -13,7 +12,6 @@ export class ProfileStore {
     reaction(
       () => this.activeTab,
       activeTab => {
-        console.log('veamos algo');
         this.followings = [];
 
         if (activeTab === 3) this.loadFollowers();
@@ -22,8 +20,9 @@ export class ProfileStore {
 
       }
     );
+
     reaction(
-      () => this.profile!.followersCount,
+      () => this.profile && this.profile.followersCount,
       () => {
         this.loadFollowers();
       }
@@ -37,9 +36,26 @@ export class ProfileStore {
   @observable updatingProfile = false;
   @observable followings: IProfile[] = [];
   @observable activeTab: number = 1;
+  @observable userActivities: IUserActivity[] = [];
+  @observable loadingActivities = false;
+
+  @action loadUserActivities = async (username: string, predicate?: string) => {
+    this.loadingActivities = true;
+    try {
+      const activities = await agent.Profiles.listActivities(username, predicate);
+      runInAction(() => {
+        this.userActivities = activities;
+        this.loadingActivities = false;
+      });
+    } catch (error) {
+      toast.error('Problem loading user activities');
+      runInAction(() => {
+        this.loadingActivities = false;
+      })
+    }
+  };
 
   @action setActiveTab = (tabIndex: number) => {
-    console.log(this.activeTab, 'now', tabIndex, 'then');
     this.activeTab = tabIndex;
   };
 

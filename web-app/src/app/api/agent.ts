@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { IActivity } from '../models/activity';
+import { IActivity, IActivitiesEnvelope } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
@@ -47,9 +47,9 @@ const sleep = (ms: number) => (response: AxiosResponse) =>
   );
 
 const request = {
-  get: (url: string) =>
+  get: (url: string, params?: URLSearchParams) =>
     axios
-      .get(url)
+      .get(url, { params })
       .then(sleep(1000))
       .then(responseBody),
   post: (url: string, body: {}) =>
@@ -79,7 +79,8 @@ const request = {
 };
 
 const Activities = {
-  list: (): Promise<IActivity[]> => request.get('/activities'),
+  list: (params: URLSearchParams): Promise<IActivitiesEnvelope> =>
+    request.get('/activities', params),
   details: (id: string): Promise<IActivity> => request.get(`/activities/${id}`),
   create: (activity: IActivity) => request.post('/activities', activity),
   update: (activity: IActivity) =>
@@ -105,10 +106,15 @@ const Profiles = {
     request.postForm(`/photos/`, photo),
   setMainPhoto: (id: string) => request.post(`/photos/${id}/setmain`, {}),
   deletePhoto: (id: string) => request.del(`/photos/${id}`),
-  follow: (username: string) => request.post(`/profiles/${username}/follow`, {}),
+  follow: (username: string) =>
+    request.post(`/profiles/${username}/follow`, {}),
   unfollow: (username: string) => request.del(`/profiles/${username}/follow`),
-  listFollowers: (username: string) => request.get(`/profiles/${username}/followers`),
-  listFollowings: (username: string) => request.get(`/profiles/${username}/followings`),
+  listFollowers: (username: string) =>
+    request.get(`/profiles/${username}/followers`),
+  listFollowings: (username: string) =>
+    request.get(`/profiles/${username}/followings`),
+  listActivities: (username: string, predicate?: string) =>
+    request.get(`/profiles/${username}/activities?predicate=${predicate}`),
 };
 
 export default {

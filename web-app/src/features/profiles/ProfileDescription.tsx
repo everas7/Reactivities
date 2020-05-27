@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Header, Icon, Tab, Grid, Button, Label } from 'semantic-ui-react';
+import { Header, Icon, Tab, Grid, Button, } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { ProfileEditForm } from './ProfileEditForm';
