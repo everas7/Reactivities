@@ -10,23 +10,35 @@ import { observer } from 'mobx-react-lite';
 export const ProfilePage = observer(() => {
   const params = useParams<{ username: string }>();
   const rootStore = useContext(RootStoreContext);
-  const { profile, loadProfile, loadingProfile } = rootStore.profileStore;
+  const {
+    profile,
+    loadProfile,
+    loadingProfile,
+    loading,
+    followProfile,
+    unfollowProfile,
+    isCurrentUser,
+    setActiveTab,
+  } = rootStore.profileStore;
 
   useEffect(() => {
     loadProfile(params.username);
   }, [loadProfile, params.username]);
-  
-    if (loadingProfile)
-      return <LoadingComponent content="Loading profile..." />;
 
+  if (loadingProfile) return <LoadingComponent content="Loading profile..." />;
 
-    return (
-      <Grid>
-        <Grid.Column width={16}>
-          <ProfileHeader profile={profile!} />
-          <ProfileContent />
-        </Grid.Column>
-      </Grid>
-    );
+  return (
+    <Grid>
+      <Grid.Column width={16}>
+        <ProfileHeader
+          profile={profile!}
+          loading={loading}
+          follow={followProfile}
+          isCurrentUser={isCurrentUser}
+          unfollow={unfollowProfile}
+        />
+        <ProfileContent  key={profile!.username} setActiveTab={setActiveTab} />
+      </Grid.Column>
+    </Grid>
+  );
 });
-
