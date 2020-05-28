@@ -4,8 +4,8 @@ import { ProfileHeader } from './ProfileHeader';
 import { ProfileContent } from './ProfileContent';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { useParams } from 'react-router';
-import { LoadingComponent } from '../../app/common/loader/LoadingComponent';
 import { observer } from 'mobx-react-lite';
+import {ProfilePagePlaceholder} from './ProfilePagePlaceholder';
 
 export const ProfilePage = observer(() => {
   const params = useParams<{ username: string }>();
@@ -18,26 +18,33 @@ export const ProfilePage = observer(() => {
     followProfile,
     unfollowProfile,
     isCurrentUser,
-    setActiveTab,
+    setActiveTab
   } = rootStore.profileStore;
 
   useEffect(() => {
     loadProfile(params.username);
   }, [loadProfile, params.username]);
 
-  if (loadingProfile) return <LoadingComponent content="Loading profile..." />;
-
   return (
     <Grid>
       <Grid.Column width={16}>
-        <ProfileHeader
-          profile={profile!}
-          loading={loading}
-          follow={followProfile}
-          isCurrentUser={isCurrentUser}
-          unfollow={unfollowProfile}
-        />
-        <ProfileContent  key={profile!.username} setActiveTab={setActiveTab} />
+        {loadingProfile ? (
+          <ProfilePagePlaceholder />
+        ) : (
+          <>
+            <ProfileHeader
+              profile={profile!}
+              loading={loading}
+              follow={followProfile}
+              isCurrentUser={isCurrentUser}
+              unfollow={unfollowProfile}
+            />
+            <ProfileContent
+              key={profile!.username}
+              setActiveTab={setActiveTab}
+            />
+          </>
+        )}
       </Grid.Column>
     </Grid>
   );

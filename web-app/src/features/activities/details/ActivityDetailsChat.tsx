@@ -16,10 +16,11 @@ export const ActivityDetailsChat = observer(() => {
     activity
   } = rootStore.activityStore;
 
+  const { id: activityId } = activity!;
   useEffect(() => {
-    createHubConnection(activity!.id);
+    createHubConnection(activityId);
     return stopHubConnection;
-  }, [createHubConnection, stopHubConnection, activity]);
+  }, [createHubConnection, stopHubConnection, activityId]);
 
   return (
     <Fragment>

@@ -12,6 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import { RootStoreContext } from '../stores/rootStore';
 import ModalContainer from '../common/modals/ModalContainer';
 import {ProfilePage} from '../../features/profiles/ProfilePage';
+import { PrivateRoute } from './PrivateRoute';
 
 function App() {
   const location = useLocation();
@@ -39,19 +40,19 @@ function App() {
             <NavBar />
             <Container style={{ marginTop: '7em' }}>
               <Switch>
-                <Route exact path="/activities" component={ActivityDashboard} />
-                <Route
+                <PrivateRoute exact path="/activities" component={ActivityDashboard} />
+                <PrivateRoute
                   key={location.key}
                   exact
                   path={['/activities/create', '/activities/manage/:id']}
                   component={ActivityForm}
                 />
-                <Route
+                <PrivateRoute
                   exact
                   path="/activities/:id"
                   component={ActivityDetails}
                 />
-                <Route
+                <PrivateRoute
                   exact
                   path="/profile/:username"
                   component={ProfilePage}

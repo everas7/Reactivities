@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
 import { IProfile, IPhoto, IProfileFormValues } from '../models/profile';
 
-axios.defaults.baseURL = 'http://localhost:5000/api';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 axios.interceptors.request.use(
   config => {
@@ -22,9 +22,18 @@ axios.interceptors.response.use(undefined, error => {
   if (error.message === 'Network Error' && !error.response) {
     toast.error('Network Error - Unable to reach out the server');
   }
-  const { status, data, config } = error.response;
+  const { status, data, config, headers } = error.response;
   if (status === 404) {
     history.push('/notfound');
+  }
+
+  if (
+    status === 401 &&
+    headers['www-authenticate'].includes(`Bearer error="invalid_token"`)
+  ) {
+    window.localStorage.removeItem('jwt');
+    history.push('/');
+    toast.info('Your session has expired, please login again');
   }
   if (
     status === 400 &&
@@ -41,31 +50,22 @@ axios.interceptors.response.use(undefined, error => {
 
 const responseBody = (response: AxiosResponse) => response.data;
 
-const sleep = (ms: number) => (response: AxiosResponse) =>
-  new Promise<AxiosResponse>(resolve =>
-    setTimeout(() => resolve(response), ms)
-  );
-
 const request = {
   get: (url: string, params?: URLSearchParams) =>
     axios
       .get(url, { params })
-      .then(sleep(1000))
       .then(responseBody),
   post: (url: string, body: {}) =>
     axios
       .post(url, body)
-      .then(sleep(1000))
       .then(responseBody),
   put: (url: string, body: {}) =>
     axios
       .put(url, body)
-      .then(sleep(1000))
       .then(responseBody),
   del: (url: string) =>
     axios
       .delete(url)
-      .then(sleep(1000))
       .then(responseBody),
   postForm: (url: string, file: Blob) => {
     let formData = new FormData();
@@ -114,7 +114,7 @@ const Profiles = {
   listFollowings: (username: string) =>
     request.get(`/profiles/${username}/followings`),
   listActivities: (username: string, predicate?: string) =>
-    request.get(`/profiles/${username}/activities?predicate=${predicate}`),
+    request.get(`/profiles/${username}/activities?predicate=${predicate}`)
 };
 
 export default {
