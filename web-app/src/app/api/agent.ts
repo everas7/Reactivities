@@ -29,7 +29,7 @@ axios.interceptors.response.use(undefined, error => {
 
   if (
     status === 401 &&
-    headers['www-authenticate'].includes(`Bearer error="invalid_token"`)
+    headers['www-authenticate']?.includes(`Bearer error="invalid_token"`)
   ) {
     window.localStorage.removeItem('jwt');
     history.push('/');

@@ -19,9 +19,12 @@ export const LoginForm = () => {
   return (
     <FinalForm
       onSubmit={(values: IUserFormValues) =>
-        login(values).catch(error => ({
+        login(values).catch(error => {
+          console.log(error, 'veamos');
+          return {
           [FORM_ERROR]: error
-        }))
+          }
+        })
       }
       validate={validate}
       render={({
