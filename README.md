@@ -52,6 +52,7 @@ For this you may need to create a free account at [Cloudinary](https://cloudinar
   "TokenKey": "super secret key",
 ```
 
+[Optional]
 In order to configure facebook signin for the application add this configuration variables to appsettings.json as well using the right values in your case.
 
 ```
