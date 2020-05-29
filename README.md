@@ -61,6 +61,18 @@ In order to configure facebook signin for the application add this configuration
   },
 ```
 
+# Installing Dependencies
+
+API
+```
+dotnet restore
+```
+Web App
+```
+cd web-app
+npm start
+```
+
 # Running Project
 
 ```
