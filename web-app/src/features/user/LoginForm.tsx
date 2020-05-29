@@ -1,29 +1,30 @@
 import React, { useContext } from 'react';
 import { Form as FinalForm, Field } from 'react-final-form';
-import { Form, Button, Header } from 'semantic-ui-react';
+import { Form, Button, Header, Divider } from 'semantic-ui-react';
 import { TextInput } from '../../app/common/form/TextInput';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { IUserFormValues } from '../../app/models/user';
 import { combineValidators, isRequired } from 'revalidate';
 import { FORM_ERROR } from 'final-form';
+import {FacebookLogin} from './FacebookLogin';
+import { observer } from 'mobx-react-lite';
 
 const validate = combineValidators({
   email: isRequired('email'),
   password: isRequired('password')
 });
 
-export const LoginForm = () => {
+export const LoginForm = observer(() => {
   const rootStore = useContext(RootStoreContext);
-  const { login } = rootStore.userStore;
+  const { login, facebookLogin, loadingFbLogin } = rootStore.userStore;
   return (
     <FinalForm
       onSubmit={(values: IUserFormValues) =>
         login(values).catch(error => {
-          console.log(error, 'veamos');
           return {
-          [FORM_ERROR]: error
-          }
+            [FORM_ERROR]: error
+          };
         })
       }
       validate={validate}
@@ -46,9 +47,14 @@ export const LoginForm = () => {
             placeholder="Password"
             type="password"
           />
-          {(submitError && submitError.status === 401) && !dirtySinceLastSubmit && (
-            <ErrorMessage error={submitError} text="Email or password is incorrect" />
-          )}
+          {submitError &&
+            submitError.status === 401 &&
+            !dirtySinceLastSubmit && (
+              <ErrorMessage
+                error={submitError}
+                text="Email or password is incorrect"
+              />
+            )}
           <Button
             loading={submitting}
             disabled={(invalid && !dirtySinceLastSubmit) || pristine}
@@ -56,8 +62,10 @@ export const LoginForm = () => {
             color="teal"
             content="Login"
           />
+          <Divider horizontal>Or</Divider>
+          <FacebookLogin fbCallback={facebookLogin} loading={loadingFbLogin} />
         </Form>
       )}
     />
   );
-};
+});

@@ -11,6 +11,7 @@ export class UserStore {
   }
 
   @observable user: IUser | null = null;
+  @observable loadingFbLogin = false;
 
   @computed get isLoggedIn() {
     return !!this.user;
@@ -61,4 +62,22 @@ export class UserStore {
     }
   };
 
+  @action facebookLogin = async (response: any) => {
+    this.loadingFbLogin = true;
+    try {
+      const user = await agent.User.fbLogin(response.accessToken);
+      runInAction(() => {
+        this.user = user;
+        this.rootStore.commonStore.setToken(user.token);
+        this.rootStore.modalStore.closeModal();
+        this.loadingFbLogin = false;
+      });
+      history.push('/activities');
+    } catch (error) {
+      runInAction(() => {
+        this.loadingFbLogin = false;
+      });
+      throw error;
+    }
+  };
 }
