@@ -44,7 +44,7 @@ namespace API
     private readonly string CorsPolicy = "CorsPolicy";
 
     // This method gets called by the runtime. Use this method to add services to the container.
-    public void ConfigureServices(IServiceCollection services)
+    public void ConfigureDevelopmentServices(IServiceCollection services)
     {
       services.AddDbContext<DataContext>(opt =>
       {
@@ -52,17 +52,33 @@ namespace API
         opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
       });
 
+      ConfigureServices(services);
+    }
+
+    public void ConfigureProductionServices(IServiceCollection services)
+    {
+      services.AddDbContext<DataContext>(opt =>
+      {
+        opt.UseLazyLoadingProxies();
+        opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
+      });
+
+      ConfigureServices(services);
+    }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
       services.AddCors(opt =>
       {
         opt.AddPolicy(CorsPolicy, policy =>
-              {
-                policy
-                .AllowAnyHeader()
-                .WithExposedHeaders("WWW-Authenticate")
-                .AllowAnyMethod()
-                .WithOrigins("http://localhost:3000")
-                .AllowCredentials();
-              });
+        {
+          policy
+          .AllowAnyHeader()
+          .WithExposedHeaders("WWW-Authenticate")
+          .AllowAnyMethod()
+          .WithOrigins("http://localhost:3000")
+          .AllowCredentials();
+        });
       });
       services.AddMediatR(typeof(List.Handler).Assembly);
       services.AddAutoMapper(typeof(List.Handler));
