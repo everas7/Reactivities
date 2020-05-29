@@ -37,8 +37,8 @@ const pane = (
   </Tab.Pane>
 );
 
-const menuItem = (
-  <Item>
+const getMenuItem = (key: number) => (
+  <Item key={key} active="true">
     <Placeholder>
       <Placeholder.Paragraph>
         <Placeholder.Line as="h2" />
@@ -48,11 +48,11 @@ const menuItem = (
 );
 
 const panes = [
-  { menuItem: menuItem, render: () => pane },
-  { menuItem: menuItem, render: () => pane },
-  { menuItem: menuItem, render: () => pane },
-  { menuItem: menuItem, render: () => pane },
-  { menuItem: menuItem, render: () => pane }
+  { menuItem: getMenuItem(1), render: () => pane },
+  { menuItem: getMenuItem(2), render: () => pane },
+  { menuItem: getMenuItem(3), render: () => pane },
+  { menuItem: getMenuItem(4), render: () => pane },
+  { menuItem: getMenuItem(5), render: () => pane }
 ];
 
 export const ProfilePagePlaceholder = () => {
@@ -92,14 +92,6 @@ export const ProfilePagePlaceholder = () => {
             <Divider />
           </Grid.Column>
         </Grid>
-        {/* <ProfileHeader
-          profile={profile!}
-          loading={loading}
-          follow={followProfile}
-          isCurrentUser={isCurrentUser}
-          unfollow={unfollowProfile}
-        />
-        <ProfileContent  key={profile!.username} setActiveTab={setActiveTab} /> */}
       </Segment>
       <Tab
         panes={panes}

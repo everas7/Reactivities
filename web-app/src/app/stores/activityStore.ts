@@ -57,7 +57,6 @@ export class ActivityStore {
     }
 
     if (predicate !== 'all') this.predicate.set(predicate, value);
-    console.log(this.predicate.keys(), 'valores');
   };
 
   @computed get axiosParams(): URLSearchParams {
@@ -216,7 +215,6 @@ export class ActivityStore {
   @action createActivity = async (activity: IActivity) => {
     this.submitting = true;
     try {
-      console.log(activity, 'veamos');
       await agent.Activities.create(activity);
       const attendee = this.mapUserToAttendee(this.rootStore.userStore.user!);
       activity.isHost = true;

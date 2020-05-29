@@ -50,6 +50,17 @@ Add this configuration variables to appsettings.json with the right values for y
   "TokenKey": "super secret key",
 ```
 
+In order to configure facebook signin for the application add this configuration variables to appsettings.json as well using the right values in your case.
+
+```
+"Authentication": {
+    "Facebook": {
+      "AppId":"theappid",
+      "AppSecret":"theappsecret"
+    }
+  },
+```
+
 # Running Project
 
 ```

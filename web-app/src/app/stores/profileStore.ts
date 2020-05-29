@@ -79,7 +79,6 @@ export class ProfileStore {
       runInAction(() => {
         this.loadingProfile = false;
       });
-      console.log(error);
     }
   };
 
