@@ -41,6 +41,8 @@ WebApp Structure
 
 Add this configuration variables to appsettings.json with the right values for your cloudinary account and the token key of your choice.
 
+For this you may need to create a free account at [Cloudinary](https://cloudinary.com) in case you don't have one, and get the cloudname, api secret and key of your specific account.
+
 ```
  "Cloudinary": {
     "CloudName": "thename",
